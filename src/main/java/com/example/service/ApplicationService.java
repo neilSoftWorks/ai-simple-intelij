@@ -29,9 +29,12 @@ public class ApplicationService {
     public BusinessDetails updateBusinessDetails(Long id, BusinessDetails updatedDetails) {
         return businessDetailsRepository.findById(id)
                 .map(businessDetails -> {
-                    businessDetails.setBusinessName(updatedDetails.getBusinessName());
-                    businessDetails.setOwnerName(updatedDetails.getOwnerName());
-                    businessDetails.setPhoneNumber(updatedDetails.getPhoneNumber()); // Added line
+                    businessDetails.setName(updatedDetails.getName());
+                    businessDetails.setContactDetails(updatedDetails.getContactDetails());
+                    businessDetails.setAddress(updatedDetails.getAddress());
+                    businessDetails.setIndustry(updatedDetails.getIndustry());
+                    businessDetails.setFinancialInformation(updatedDetails.getFinancialInformation());
+                    businessDetails.setPhoneNumber(updatedDetails.getPhoneNumber());
                     return businessDetailsRepository.save(businessDetails);
                 })
                 .orElse(null);

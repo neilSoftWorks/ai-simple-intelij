@@ -3,24 +3,32 @@ package com.example.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "business_details")
 public class BusinessDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "business_name")
-    private String businessName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "owner_name")
-    private String ownerName;
+    @Column(name = "contact_details")
+    private String contactDetails;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "industry")
+    private String industry;
+
+    @Column(name = "financial_information")
+    private String financialInformation;
 
     @Column(name = "phone_number")
-    private String phoneNumber; // Added field
+    private String phoneNumber;
 
-    // Constructors...
-
-    // Getters and setters...
+    // Constructors, getters, setters...
 
     public Long getId() {
         return id;
@@ -30,20 +38,44 @@ public class BusinessDetails {
         this.id = id;
     }
 
-    public String getBusinessName() {
-        return businessName;
+    public String getName() {
+        return name;
     }
 
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public String getContactDetails() {
+        return contactDetails;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setContactDetails(String contactDetails) {
+        this.contactDetails = contactDetails;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public String getFinancialInformation() {
+        return financialInformation;
+    }
+
+    public void setFinancialInformation(String financialInformation) {
+        this.financialInformation = financialInformation;
     }
 
     public String getPhoneNumber() {
