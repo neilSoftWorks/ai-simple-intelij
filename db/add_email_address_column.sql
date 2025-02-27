@@ -1,0 +1,1 @@
+ALTER TABLE business_details ADD email_address VARCHAR(255);

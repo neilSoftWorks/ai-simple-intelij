@@ -2,6 +2,8 @@ package com.example.controller;
 
 import com.example.model.BusinessDetails;
 import com.example.service.ApplicationService;
+import com.example.repository.BusinessDetailsRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +12,17 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/applications")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = {"http://localhost:4200", "null"})
 public class ApplicationController {
 
     @Autowired
     private ApplicationService applicationService;
 
+    @Autowired
+    private BusinessDetailsRepository businessDetailsRepository;
+
     @PostMapping
-    public BusinessDetails submitApplication(@RequestBody BusinessDetails businessDetails) {
+    public BusinessDetails submitApplication(@Valid @RequestBody BusinessDetails businessDetails) {
         return applicationService.submitApplication(businessDetails);
     }
 
@@ -36,5 +41,8 @@ public class ApplicationController {
         return applicationService.updateBusinessDetails(id, updatedDetails);
     }
 
-    // Other endpoints...
+    @DeleteMapping("/{id}")
+    public void deleteBusinessDetails(@PathVariable Long id) {
+        businessDetailsRepository.deleteById(id);
+    }
 }

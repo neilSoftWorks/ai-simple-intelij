@@ -35,10 +35,9 @@ public class ApplicationService {
                     businessDetails.setIndustry(updatedDetails.getIndustry());
                     businessDetails.setFinancialInformation(updatedDetails.getFinancialInformation());
                     businessDetails.setPhoneNumber(updatedDetails.getPhoneNumber());
+                    businessDetails.setEmailAddress(updatedDetails.getEmailAddress());
                     return businessDetailsRepository.save(businessDetails);
                 })
                 .orElse(null);
     }
-
-    // Other methods...
 }

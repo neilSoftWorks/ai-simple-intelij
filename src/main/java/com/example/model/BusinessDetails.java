@@ -1,6 +1,7 @@
 package com.example.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 
 @Entity
 @Table(name = "business_details")
@@ -28,8 +29,11 @@ public class BusinessDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    // Constructors, getters, setters...
+    @Email(message = "Invalid email address")
+    @Column(name = "email_address")
+    private String emailAddress;
 
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -84,5 +88,13 @@ public class BusinessDetails {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 }
