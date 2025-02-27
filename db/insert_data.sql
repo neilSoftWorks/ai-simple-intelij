@@ -1,0 +1,1 @@
+INSERT INTO business_details (name, ...) VALUES ('Test Business', ...);
