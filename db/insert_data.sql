@@ -1,1 +1,1 @@
-INSERT INTO business_details (name, ...) VALUES ('Test Business', ...);
+INSERT INTO business_details (name, contact_details, address, industry, financial_information) VALUES ('Test Business', '123-456-7890', '123 Main St', 'IT', 'Financial Info');

@@ -1,41 +1,56 @@
 package com.example.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 
 @Entity
 public class BusinessDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-    private String contactDetails;
-    private String address;
-    private String industry;
-    @Lob
-    private String financialInformation;
+    @Column(name = "business_name")
+    private String businessName;
 
-    // Getters and setters (Essential!)
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getContactDetails() { return contactDetails; }
-    public void setContactDetails(String contactDetails) { this.contactDetails = contactDetails; }
+    @Column(name = "owner_name")
+    private String ownerName;
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    @Column(name = "phone_number")
+    private String phoneNumber; // Added field
 
-    public String getIndustry() { return industry; }
-    public void setIndustry(String industry) { this.industry = industry; }
+    // Constructors...
 
-    public String getFinancialInformation() { return financialInformation; }
-    public void setFinancialInformation(String financialInformation) { this.financialInformation = financialInformation; }
+    // Getters and setters...
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

@@ -1,11 +1,10 @@
 package com.example.service;
 
-import com.example.model.ApplicationStatus;
 import com.example.model.BusinessDetails;
-import com.example.repository.ApplicationStatusRepository;
 import com.example.repository.BusinessDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,40 +12,30 @@ import java.util.Optional;
 public class ApplicationService {
 
     @Autowired
-    private ApplicationStatusRepository applicationStatusRepository;
-
-    @Autowired
     private BusinessDetailsRepository businessDetailsRepository;
 
-    // ... (KafkaProducerService and other dependencies)
-
-    public ApplicationStatus submitApplication(BusinessDetails businessDetails) {
-        businessDetails = businessDetailsRepository.save(businessDetails);
-        ApplicationStatus applicationStatus = new ApplicationStatus();
-        applicationStatus.setBusinessDetails(businessDetails); // Set relationship
-        applicationStatus.setStatus("SUBMITTED");
-        applicationStatus = applicationStatusRepository.save(applicationStatus);
-
-        // ... (Kafka event publishing)
-        return applicationStatus;
+    public BusinessDetails submitApplication(BusinessDetails businessDetails) {
+        return businessDetailsRepository.save(businessDetails);
     }
 
     public List<BusinessDetails> getAllBusinessDetails() {
         return businessDetailsRepository.findAll();
     }
 
-    public BusinessDetails getBusinessDetailsById(Long id) {
-        Optional<BusinessDetails> optionalBusinessDetails = businessDetailsRepository.findById(id);
-        return optionalBusinessDetails.orElse(null);
+    public Optional<BusinessDetails> getBusinessDetailsById(Long id) {
+        return businessDetailsRepository.findById(id);
     }
 
-    public BusinessDetails updateBusinessDetails(Long id, BusinessDetails businessDetails) {
-        Optional<BusinessDetails> optionalBusinessDetails = businessDetailsRepository.findById(id);
-        if (optionalBusinessDetails.isPresent()) {
-            businessDetails.setId(id);
-            return businessDetailsRepository.save(businessDetails);
-        } else {
-            return null;
-        }
+    public BusinessDetails updateBusinessDetails(Long id, BusinessDetails updatedDetails) {
+        return businessDetailsRepository.findById(id)
+                .map(businessDetails -> {
+                    businessDetails.setBusinessName(updatedDetails.getBusinessName());
+                    businessDetails.setOwnerName(updatedDetails.getOwnerName());
+                    businessDetails.setPhoneNumber(updatedDetails.getPhoneNumber()); // Added line
+                    return businessDetailsRepository.save(businessDetails);
+                })
+                .orElse(null);
     }
+
+    // Other methods...
 }

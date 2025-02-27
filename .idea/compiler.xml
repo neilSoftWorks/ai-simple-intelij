@@ -11,10 +11,6 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-maven-plugin/1.18.20/lombok-maven-plugin-1.18.20.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-maven-plugin/1.18.20/lombok-maven-plugin-1.18.20.jar" />
         </processorPath>
         <module name="CreditApplicationSystem" />
       </profile>
