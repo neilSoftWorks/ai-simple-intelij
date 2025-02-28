@@ -82,6 +82,7 @@ class ApplicationControllerTest {
                 .andExpect(status().isOk());
     }
 
+
     @Test
     void deleteBusinessDetails_shouldReturnOk() throws Exception {
         Long id = 1L;
@@ -90,4 +91,5 @@ class ApplicationControllerTest {
         mockMvc.perform(delete("/api/applications/1"))
                 .andExpect(status().isOk());
     }
+
 }

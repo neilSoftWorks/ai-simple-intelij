@@ -1,9 +1,12 @@
 package com.example.service;
 
+import com.example.model.ApplicationStatus;
 import com.example.model.BusinessDetails;
+import com.example.repository.ApplicationStatusRepository;
 import com.example.repository.BusinessDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +17,17 @@ public class ApplicationService {
     @Autowired
     private BusinessDetailsRepository businessDetailsRepository;
 
+    @Autowired
+    private ApplicationStatusRepository applicationStatusRepository;
+
+    @Transactional
     public BusinessDetails submitApplication(BusinessDetails businessDetails) {
-        return businessDetailsRepository.save(businessDetails);
+        BusinessDetails savedBusinessDetails = businessDetailsRepository.save(businessDetails);
+        ApplicationStatus initialStatus = new ApplicationStatus();
+        initialStatus.setBusinessDetails(savedBusinessDetails);
+        initialStatus.setStatus("Submitted");
+        applicationStatusRepository.save(initialStatus);
+        return savedBusinessDetails;
     }
 
     public List<BusinessDetails> getAllBusinessDetails() {
@@ -26,22 +38,28 @@ public class ApplicationService {
         return businessDetailsRepository.findById(id);
     }
 
-    public BusinessDetails updateBusinessDetails(Long id, BusinessDetails updatedDetails) {
-        return businessDetailsRepository.findById(id)
-                .map(businessDetails -> {
-                    businessDetails.setName(updatedDetails.getName());
-                    businessDetails.setContactDetails(updatedDetails.getContactDetails());
-                    businessDetails.setAddress(updatedDetails.getAddress());
-                    businessDetails.setIndustry(updatedDetails.getIndustry());
-                    businessDetails.setFinancialInformation(updatedDetails.getFinancialInformation());
-                    businessDetails.setPhoneNumber(updatedDetails.getPhoneNumber());
-                    businessDetails.setEmailAddress(updatedDetails.getEmailAddress());
-                    return businessDetailsRepository.save(businessDetails);
-                })
-                .orElse(null);
+    @Transactional
+    public BusinessDetails updateBusinessDetails(Long id, BusinessDetails updatedBusinessDetails) {
+        Optional<BusinessDetails> existingBusinessDetails = businessDetailsRepository.findById(id);
+        if (existingBusinessDetails.isPresent()) {
+            updatedBusinessDetails.setId(id);
+            BusinessDetails savedBusinessDetails = businessDetailsRepository.save(updatedBusinessDetails);
+
+            // Create new ApplicationStatus record for update
+            ApplicationStatus updateStatus = new ApplicationStatus();
+            updateStatus.setBusinessDetails(savedBusinessDetails);
+            updateStatus.setStatus("Updated");
+            applicationStatusRepository.save(updateStatus);
+
+            return savedBusinessDetails;
+        }
+        return null;
     }
 
+    @Transactional
     public void deleteBusinessDetails(Long id) {
+        List<ApplicationStatus> applicationStatuses = applicationStatusRepository.findByBusinessDetailsId(id);
+        applicationStatusRepository.deleteAll(applicationStatuses);
         businessDetailsRepository.deleteById(id);
     }
 }
