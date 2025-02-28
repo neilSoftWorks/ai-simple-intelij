@@ -40,4 +40,8 @@ public class ApplicationService {
                 })
                 .orElse(null);
     }
+
+    public void deleteBusinessDetails(Long id) {
+        businessDetailsRepository.deleteById(id);
+    }
 }
