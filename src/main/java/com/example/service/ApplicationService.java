@@ -1,10 +1,13 @@
 package com.example.service;
 
+import com.example.event.BusinessDetailsCreatedEvent;
+import com.example.event.BusinessDetailsUpdatedEvent;
 import com.example.model.ApplicationStatus;
 import com.example.model.BusinessDetails;
 import com.example.repository.ApplicationStatusRepository;
 import com.example.repository.BusinessDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,9 @@ public class ApplicationService {
     @Autowired
     private ApplicationStatusRepository applicationStatusRepository;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Transactional
     public BusinessDetails submitApplication(BusinessDetails businessDetails) {
         BusinessDetails savedBusinessDetails = businessDetailsRepository.save(businessDetails);
@@ -27,6 +33,7 @@ public class ApplicationService {
         initialStatus.setBusinessDetails(savedBusinessDetails);
         initialStatus.setStatus("Submitted");
         applicationStatusRepository.save(initialStatus);
+        applicationEventPublisher.publishEvent(new BusinessDetailsCreatedEvent(this, savedBusinessDetails));
         return savedBusinessDetails;
     }
 
@@ -44,12 +51,13 @@ public class ApplicationService {
         if (existingBusinessDetails.isPresent()) {
             updatedBusinessDetails.setId(id);
             BusinessDetails savedBusinessDetails = businessDetailsRepository.save(updatedBusinessDetails);
-
-            // Create new ApplicationStatus record for update
             ApplicationStatus updateStatus = new ApplicationStatus();
             updateStatus.setBusinessDetails(savedBusinessDetails);
             updateStatus.setStatus("Updated");
             applicationStatusRepository.save(updateStatus);
+
+            // Publish event for update
+            applicationEventPublisher.publishEvent(new BusinessDetailsUpdatedEvent(this, savedBusinessDetails));
 
             return savedBusinessDetails;
         }
