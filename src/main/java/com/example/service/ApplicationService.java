@@ -1,30 +1,29 @@
 package com.example.service;
 
-import com.example.event.BusinessDetailsCreatedEvent;
-import com.example.event.BusinessDetailsUpdatedEvent;
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.model.ApplicationStatus;
 import com.example.model.BusinessDetails;
 import com.example.repository.ApplicationStatusRepository;
 import com.example.repository.BusinessDetailsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ApplicationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationService.class);
 
     @Autowired
     private BusinessDetailsRepository businessDetailsRepository;
 
     @Autowired
     private ApplicationStatusRepository applicationStatusRepository;
-
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     public BusinessDetails submitApplication(BusinessDetails businessDetails) {
@@ -33,7 +32,6 @@ public class ApplicationService {
         initialStatus.setBusinessDetails(savedBusinessDetails);
         initialStatus.setStatus("Submitted");
         applicationStatusRepository.save(initialStatus);
-        applicationEventPublisher.publishEvent(new BusinessDetailsCreatedEvent(this, savedBusinessDetails));
         return savedBusinessDetails;
     }
 
@@ -47,18 +45,22 @@ public class ApplicationService {
 
     @Transactional
     public BusinessDetails updateBusinessDetails(Long id, BusinessDetails updatedBusinessDetails) {
+        logger.info("Updating business details with id: {}", id);
+        logger.info("Updated BusinessDetails: {}", updatedBusinessDetails);
+
         Optional<BusinessDetails> existingBusinessDetails = businessDetailsRepository.findById(id);
         if (existingBusinessDetails.isPresent()) {
-            updatedBusinessDetails.setId(id);
-            BusinessDetails savedBusinessDetails = businessDetailsRepository.save(updatedBusinessDetails);
-            ApplicationStatus updateStatus = new ApplicationStatus();
-            updateStatus.setBusinessDetails(savedBusinessDetails);
-            updateStatus.setStatus("Updated");
-            applicationStatusRepository.save(updateStatus);
+            BusinessDetails businessDetails = existingBusinessDetails.get();
+            businessDetails.setName(updatedBusinessDetails.getName());
+            businessDetails.setAddress(updatedBusinessDetails.getAddress());
+            businessDetails.setContact(updatedBusinessDetails.getContact());
+            businessDetails.setPhone(updatedBusinessDetails.getPhone());
+            businessDetails.setEmail(updatedBusinessDetails.getEmail());
+            businessDetails.setIndustry(updatedBusinessDetails.getIndustry());
 
-            // Publish event for update
-            applicationEventPublisher.publishEvent(new BusinessDetailsUpdatedEvent(this, savedBusinessDetails));
+            BusinessDetails savedBusinessDetails = businessDetailsRepository.save(businessDetails);
 
+            logger.info("Saved BusinessDetails: {}", savedBusinessDetails);
             return savedBusinessDetails;
         }
         return null;

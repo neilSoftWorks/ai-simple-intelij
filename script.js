@@ -1,29 +1,24 @@
 const table = document.getElementById('businessDetailsTable').getElementsByTagName('tbody')[0];
 
 function fetchBusinessDetails() {
-    fetch('http://localhost:8080/api/applications')
+    fetch('/api/applications')
         .then(response => response.json())
         .then(data => {
-            table.innerHTML = '';
+            table.innerHTML = ''; // Clear existing rows
             data.forEach(detail => {
                 let row = table.insertRow();
                 let idCell = row.insertCell(0);
                 let nameCell = row.insertCell(1);
                 let addressCell = row.insertCell(2);
                 let contactCell = row.insertCell(3);
-                let phoneCell = row.insertCell(4);
-                let emailCell = row.insertCell(5);
-                let industryCell = row.insertCell(6);
 
                 idCell.textContent = detail.id;
                 nameCell.textContent = detail.name;
                 addressCell.textContent = detail.address;
                 contactCell.textContent = detail.contact;
-                phoneCell.textContent = detail.phone;
-                emailCell.textContent = detail.email;
-                industryCell.textContent = detail.industry;
 
                 row.addEventListener('dblclick', function() {
+                    // Handle double-click (edit or delete)
                     handleRowDoubleClick(detail.id);
                 });
             });
@@ -32,25 +27,29 @@ function fetchBusinessDetails() {
 }
 
 function handleRowDoubleClick(id) {
+    // Implement edit or delete logic here
     if (confirm("Edit or Delete ID: " + id + "? (OK to Edit, Cancel to Delete)")) {
+        // Edit logic
         editBusinessDetails(id);
     } else {
+        // Delete logic
         deleteBusinessDetails(id);
     }
 }
 
 function editBusinessDetails(id) {
+    // Redirect to a form or show a modal for editing
     window.location.href = `edit.html?id=${id}`;
 }
 
 function deleteBusinessDetails(id) {
-    fetch(`http://localhost:8080/api/applications/${id}`, {
+    fetch(`/api/applications/${id}`, {
         method: 'DELETE'
     })
     .then(response => {
         if (response.ok) {
             alert('Business details deleted successfully.');
-            fetchBusinessDetails();
+            fetchBusinessDetails(); // Refresh the table
         } else {
             alert('Failed to delete business details.');
         }
@@ -62,16 +61,13 @@ function submitBusinessDetails() {
     const name = document.getElementById('name').value;
     const address = document.getElementById('address').value;
     const contact = document.getElementById('contact').value;
-    const phone = document.getElementById('phone').value;
-    const email = document.getElementById('email').value;
-    const industry = document.getElementById('industry').value;
 
-    fetch('http://localhost:8080/api/applications', {
+    fetch('/api/applications', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, address, contact, phone, email, industry })
+        body: JSON.stringify({ name, address, contact })
     })
     .then(response => {
         if (response.ok) {
@@ -84,4 +80,5 @@ function submitBusinessDetails() {
     .catch(error => console.error('Error submitting business details:', error));
 }
 
+// Fetch and display business details on page load
 fetchBusinessDetails();

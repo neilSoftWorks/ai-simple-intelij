@@ -1,39 +1,34 @@
 package com.example.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "business_details")
 public class BusinessDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "contact_details")
-    private String contactDetails;
+    @Column(name = "CONTACT_DETAILS")
+    private String contact;
 
-    @Column(name = "address")
     private String address;
 
-    @Column(name = "industry")
     private String industry;
 
-    @Column(name = "financial_information")
-    private String financialInformation;
+    @Column(name = "PHONE_NUMBER")
+    private String phone;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "EMAIL_ADDRESS")
+    private String email;
 
-    @Email(message = "Invalid email address")
-    @Column(name = "email_address")
-    private String emailAddress;
-
-    // Getters and setters
+    // Constructors, getters, setters, and toString()
     public Long getId() {
         return id;
     }
@@ -50,12 +45,12 @@ public class BusinessDetails {
         this.name = name;
     }
 
-    public String getContactDetails() {
-        return contactDetails;
+    public String getContact() {
+        return contact;
     }
 
-    public void setContactDetails(String contactDetails) {
-        this.contactDetails = contactDetails;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public String getAddress() {
@@ -74,27 +69,32 @@ public class BusinessDetails {
         this.industry = industry;
     }
 
-    public String getFinancialInformation() {
-        return financialInformation;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setFinancialInformation(String financialInformation) {
-        this.financialInformation = financialInformation;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    @Override
+    public String toString() {
+        return "BusinessDetails{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", contact='" + contact + '\'' +
+                ", address='" + address + '\'' +
+                ", industry='" + industry + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
